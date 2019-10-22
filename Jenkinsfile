@@ -19,6 +19,13 @@ pipeline {
                 sh 'cd server && tox'
                 sh 'cd web && tox'
             }
+            post {
+                always {
+                    junit 'server/results.xml'
+                    junit 'web/results.xml'
+                }
+            }
         }
+
     }
 }
