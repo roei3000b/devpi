@@ -11,5 +11,13 @@ pipeline {
                 sh 'cd web && python3 setup.py sdist bdist_wheel'
             }
         }
+        stage('Test') {
+            agent {
+                label 'linux'
+            }
+            steps {
+                sh 'cd server && tox'
+            }
+        }
     }
 }
