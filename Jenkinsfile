@@ -6,9 +6,9 @@ pipeline {
                 label 'linux'
             }
             steps {
-                sh 'python3 client/setup.py sdist bdist_wheel'
-                sh 'python3 server/setup.py sdist bdist_wheel'
-                sh 'python3 web/setup.py sdist bdist_wheel'
+                sh 'cd client && python3 setup.py sdist bdist_wheel'
+                sh 'cd server && python3 setup.py sdist bdist_wheel'
+                sh 'cd web && python3 setup.py sdist bdist_wheel'
             }
         }
     }
