@@ -17,6 +17,7 @@ pipeline {
             }
             steps {
                 sh 'cd server && tox'
+                sh 'cd web && tox'
             }
         }
     }
