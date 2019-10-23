@@ -9,23 +9,28 @@ pipeline {
                 sh 'cd client && python3 setup.py sdist bdist_wheel'
                 sh 'cd server && python3 setup.py sdist bdist_wheel'
                 sh 'cd web && python3 setup.py sdist bdist_wheel'
+                stash include: '**/dist/*.whl', name: 'devpi'
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: '**/dist/*.whl', onlyIfSuccessful: true
+                }
             }
         }
-        stage('Test') {
+        
+
+        stage('Deplpy') {
             agent {
                 label 'linux'
             }
             steps {
-                sh 'cd server && tox'
-                sh 'cd web && tox'
-            }
-            post {
-                always {
-                    junit 'server/results.xml'
-                    junit 'web/results.xml'
-                }
+                unstash 'devpi'
+                sh 'devpi-server --export /mnt/data/backup'
+                sh 'devpi-server --serverdir=/mnt/data/devpi_data --host 0.0.0.0 --stop'
+                sh 'find -iname devpi_server*.whl -exec pip install -U {} \;'
+                sh 'find -iname devpi_web*.whl -exec pip install -U {} \;'
+                sh 'devpi-server --serverdir=/mnt/data/devpi_data --host 0.0.0.0 --start'
             }
         }
-
     }
 }
