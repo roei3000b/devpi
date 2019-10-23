@@ -33,7 +33,7 @@ pipeline {
             }
         }
 
-        stage('Deplpy') {
+        stage('Deploy') {
             agent {
                 label 'linux'
             }
