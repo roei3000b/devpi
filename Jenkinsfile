@@ -17,7 +17,21 @@ pipeline {
                 }
             }
         }
-
+        stage('Test') {
+            agent {
+                label 'linux'
+            }
+            steps {
+                sh 'cd server && tox'
+                sh 'cd web && tox'
+            }
+            post {
+                always {
+                    junit 'server/results.xml'
+                    junit 'web/results.xml'
+                }
+            }
+        }
 
         stage('Deplpy') {
             agent {
