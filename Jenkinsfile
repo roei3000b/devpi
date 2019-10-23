@@ -25,8 +25,9 @@ pipeline {
             }
             steps {
                 unstash 'devpi'
-                sh 'devpi-server --export /mnt/data/backup'
                 sh 'devpi-server --serverdir=/mnt/data/devpi_data --host 0.0.0.0 --stop'
+                sh 'rm -rf /mnt/data/backup'
+                sh 'devpi-server --export /mnt/data/backup'
                 sh 'find -iname devpi_server*.whl -exec pip install -U {} \\;'
                 sh 'find -iname devpi_web*.whl -exec pip install -U {} \\;'
                 sh 'devpi-server --serverdir=/mnt/data/devpi_data --host 0.0.0.0 --start'
