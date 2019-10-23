@@ -9,7 +9,7 @@ pipeline {
                 sh 'cd client && python3 setup.py sdist bdist_wheel'
                 sh 'cd server && python3 setup.py sdist bdist_wheel'
                 sh 'cd web && python3 setup.py sdist bdist_wheel'
-                stash include: '**/dist/*.whl', name: 'devpi'
+                stash includes: '**/dist/*.whl', name: 'devpi'
             }
             post {
                 always {
